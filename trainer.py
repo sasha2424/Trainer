@@ -5,6 +5,10 @@ import time
 
 save_path = "C:/Users/Alexander Ivanov/Desktop/Python/Trainer/save.txt"
 
+'''
+Basic Math Trainer
+
+'''
 
 #########################################
 #########################################
