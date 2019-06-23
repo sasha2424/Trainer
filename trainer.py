@@ -186,8 +186,11 @@ def menu():
             profile()
         elif k == '3':
             save_player()
-        elif k == '3':
+        elif k == '4':
             send_report()
+            print("REPORT SENT")
+            print("PRESS ENTER TO RETURN")
+            input("")
         elif k == '5':
             exit_trainer()
         elif k == 'wipe':
@@ -201,15 +204,14 @@ def menu():
                 print("ALL DATA WIPED")
                 player = {}
                 save_player()
+            print()
+            print("PRESS ENTER TO RETURN")
+            input("")
         elif k == 'log':
             [print(q) for q in question_log]
             print("PRESS ENTER TO RETURN")
             input("")
-        elif k == 'report':
-            send_report()
-            print("REPORT SENT")
-            print("PRESS ENTER TO RETURN")
-            input("")
+            
         
 
 def exit_trainer():
