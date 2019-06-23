@@ -2,11 +2,11 @@ import cmd
 import random
 import os
 import time
+import smtplib
 
 directory = os.path.abspath(os.path.dirname(__file__))
 save_path = os.path.join(directory, "save.txt")
 
-print(save_path)
 
 
 '''
@@ -112,6 +112,26 @@ player = {}
 levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult1_6()]
 question_log = []
 
+
+def send_report():
+    load_player()
+    fromaddr = 'mathtrainer123456@gmail.com'
+    toaddrs  = 'ivanovajulia@yahoo.com'
+    msg = 'Subject: Adrian Math Report\r\n'
+    msg = msg + '\r\n'
+    msg = msg + 'Adrian Math Report\r\n'
+    msg = msg + str(player) + "\r\n"
+    for line in question_log:
+        msg = msg + line + "\r\n"
+    username = 'mathtrainer123456@gmail.com'
+    password = 'qweRTY123$%^'
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.login(username,password)
+    server.sendmail(fromaddr, toaddrs, msg)
+    server.quit()
+
 def give_points(points,level):
     try:
         player[level.name] = player[level.name] + points
@@ -172,13 +192,21 @@ def menu():
             [print(q) for q in question_log]
             print("PRESS ENTER TO RETURN")
             input("")
+        elif k == 'report':
+            send_report()
+            print("REPORT SENT")
+            print("PRESS ENTER TO RETURN")
+            input("")
         
 
 def exit_trainer():
     print("###########################")
     print("THANK YOU FOR TRAINING")
     print("###########################")
-    time.sleep(delay*3)
+    print()
+    send_report()
+    print("Report Sent")
+    time.sleep(delay)
     exit()
 
 def profile():
@@ -248,7 +276,7 @@ def run_level(level):
         print("##] Good Job!")
         give_points(level.points(),level)
         save_player()
-        question_log.append(level.question() + " | trys: " + str(trys))
+        question_log.append(level.question() + " | tries: " + str(trys))
         print("You Got " + str(level.points()) + " Point")
         print()
     else:
@@ -269,9 +297,6 @@ def run_level(level):
 Start Trainer
 '''
 menu()
-
-
-
-
+    
 
 ############
