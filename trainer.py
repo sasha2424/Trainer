@@ -97,8 +97,8 @@ class Mult1_6:
     def __init__(self):
         self.name = "Small Digit Multiplication"
     def next(self):
-        self.a = random.randint(1,6)
-        self.b = random.randint(1,6)
+        self.a = random.randint(2,6)
+        self.b = random.randint(2,6)
         self.c = self.a * self.b
     def wrong(self):
         return self.c - 1
