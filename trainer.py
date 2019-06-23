@@ -3,7 +3,11 @@ import random
 import os
 import time
 
-save_path = "C:/Users/Alexander Ivanov/Desktop/Python/Trainer/save.txt"
+directory = os.path.abspath(os.path.dirname(__file__))
+save_path = os.path.join(directory, "save.txt")
+
+print(save_path)
+
 
 '''
 Basic Math Trainer
@@ -18,8 +22,8 @@ class Add2D:
     def __init__(self):
         self.name = "Two Digit Addition"
     def next(self):
-        self.a = random.randint(9,99)
-        self.b = random.randint(9,99)
+        self.a = random.randint(1,5)
+        self.b = random.randint(1,2)
         self.c = self.a + self.b
     def wrong(self):
         return self.c -1
@@ -82,6 +86,22 @@ class Sub3D:
     def points(self):
         return 1
 
+class Mult1_5:
+    def __init__(self):
+        self.name = "Small Digit Multiplication"
+    def next(self):
+        self.a = random.randint(1,5)
+        self.b = random.randint(1,5)
+        self.c = self.a * self.b
+    def wrong(self):
+        return self.c - 1
+    def question(self):
+        return str(self.a) + " * " + str(self.b) + " = ?"
+    def isCorrect(self,u):
+        return self.c == u
+    def points(self):
+        return 1
+
 #########################################
 #########################################
 #########################################
@@ -120,9 +140,10 @@ def menu():
         clear()
         print("###########################")
         print("WELCOME TO THE MATH TRAINER    (" + extra + ")")
-        print("1)  START")
-        print("2) PROFILE")
-        print("3)  EXIT")
+        print("1)\tSTART")
+        print("2)\tPROFILE")
+        print("3)\tSAVE")
+        print("4)\tEXIT")
         print()
         k = input(":: ")
         
@@ -131,6 +152,8 @@ def menu():
         elif k == '2':
             profile()
         elif k == '3':
+            save_player()
+        elif k == '4':
             exit_trainer()
         elif k == 'wipe':
             print()
@@ -235,7 +258,6 @@ def run_level(level):
 '''
 Start Trainer
 '''
-
 menu()
 
 
