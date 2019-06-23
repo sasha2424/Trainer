@@ -178,6 +178,7 @@ def exit_trainer():
     print("###########################")
     print("THANK YOU FOR TRAINING")
     print("###########################")
+    time.sleep(delay*3)
     exit()
 
 def profile():
