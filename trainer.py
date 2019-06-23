@@ -22,8 +22,8 @@ class Add2D:
     def __init__(self):
         self.name = "Two Digit Addition"
     def next(self):
-        self.a = random.randint(1,5)
-        self.b = random.randint(1,2)
+        self.a = random.randint(9,99)
+        self.b = random.randint(9,99)
         self.c = self.a + self.b
     def wrong(self):
         return self.c -1
@@ -108,7 +108,7 @@ class Mult1_5:
 
 
 player = {}
-levels = [Add2D(),Add3D(),Sub2D(),Sub3D()]
+levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult1_5()]
 
 
 def give_points(points,level):
