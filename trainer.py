@@ -86,12 +86,12 @@ class Sub3D:
     def points(self):
         return 1
 
-class Mult1_5:
+class Mult1_6:
     def __init__(self):
         self.name = "Small Digit Multiplication"
     def next(self):
-        self.a = random.randint(1,5)
-        self.b = random.randint(1,5)
+        self.a = random.randint(1,6)
+        self.b = random.randint(1,6)
         self.c = self.a * self.b
     def wrong(self):
         return self.c - 1
@@ -106,10 +106,11 @@ class Mult1_5:
 #########################################
 #########################################
 
+delay = 1
 
 player = {}
-levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult1_5()]
-
+levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult1_6()]
+question_log = []
 
 def give_points(points,level):
     try:
@@ -140,6 +141,7 @@ def menu():
         clear()
         print("###########################")
         print("WELCOME TO THE MATH TRAINER    (" + extra + ")")
+        print()
         print("1)\tSTART")
         print("2)\tPROFILE")
         print("3)\tSAVE")
@@ -166,6 +168,10 @@ def menu():
                 print("ALL DATA WIPED")
                 player = {}
                 save_player()
+        elif k == 'log':
+            [print(q) for q in question_log]
+            print("PRESS ENTER TO RETURN")
+            input("")
         
 
 def exit_trainer():
@@ -186,7 +192,7 @@ def profile():
     except:
         print("No Saved Data")
     print()
-    print("RETURN TO MENU")
+    print("PRESS ENTER TO RETURN")
     input("")
 
 def start():
@@ -213,9 +219,10 @@ def start_level(level):
 
 def run_level(level):
     clear()
-    print("#"*(14 + len(level.name)))
-    print("------|" + level.name + "|------")
-    print("#"*(14 + len(level.name)))
+    print("#"*(16 + len(level.name)))
+    print("------| " + level.name + " |------")
+    print("#"*(16 + len(level.name)))
+    print("type \'q\',\'quit\', or \'exit\' to exit")
     print()
     print()
     level.next()
@@ -228,7 +235,7 @@ def run_level(level):
         if k == 'q' or k == 'quit' or k == 'exit':
             print("Returning to level select...")
             print()
-            time.sleep(.5)
+            time.sleep(delay)
             exit()
         try:
             u = int(k)
@@ -240,16 +247,18 @@ def run_level(level):
         print("##] Good Job!")
         give_points(level.points(),level)
         save_player()
+        question_log.append(level.question() + " | trys: " + str(trys))
         print("You Got " + str(level.points()) + " Point")
         print()
     else:
         give_points(-1,level)
         save_player()
+        question_log.append(level.question() + " | Incorrect")
         print("You Lost 1 Point")
         print()
         print("Let's Try a different one :(")
         print()
-    time.sleep(1)
+    time.sleep(delay)
     run_level(level)
 
 
