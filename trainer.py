@@ -3,16 +3,23 @@ import random
 import os
 import time
 import smtplib
-
-directory = os.path.abspath(os.path.dirname(__file__))
-save_path = os.path.join(directory, "save.txt")
-
-
+import datetime
 
 '''
 Basic Math Trainer
 
 '''
+
+directory = os.path.abspath(os.path.dirname(__file__))
+save_dir = os.path.join(directory, "logs")
+if not os.path.exists(save_dir):
+    os.makedirs(save_dir)
+
+now = datetime.datetime.now()
+save_name = "save_" + str(now.month) + "_" + str(now.day) + "_" + str(now.year) + ".txt"
+
+save_file = os.path.join(save_dir, save_name)
+
 
 #########################################
 #########################################
@@ -119,7 +126,10 @@ def send_report():
     toaddrs  = 'ivanovajulia@yahoo.com'
     msg = 'Subject: Adrian Math Report\r\n'
     msg = msg + '\r\n'
-    msg = msg + 'Adrian Math Report\r\n'
+    msg = msg + 'Adrian Math Report '
+    msg = msg + str(now.month) + "\\"
+    msg = msg + str(now.day) + "\\"
+    msg = msg + str(now.year) + "\r\n"
     msg = msg + str(player) + "\r\n"
     for line in question_log:
         msg = msg + line + "\r\n"
@@ -140,12 +150,12 @@ def give_points(points,level):
 
 def save_player():
     global player
-    file = open(save_path,'w')
+    file = open(save_file,'w')
     file.write(str(player))
 
 def load_player():
     global player
-    player = eval(open(save_path).read())
+    player = eval(open(save_file).read())
 
 def clear():
     os.system('cls')
@@ -165,7 +175,8 @@ def menu():
         print("1)\tSTART")
         print("2)\tPROFILE")
         print("3)\tSAVE")
-        print("4)\tEXIT")
+        print("4)\tSEND REPORT")
+        print("5)\tEXIT")
         print()
         k = input(":: ")
         
@@ -175,7 +186,9 @@ def menu():
             profile()
         elif k == '3':
             save_player()
-        elif k == '4':
+        elif k == '3':
+            send_report()
+        elif k == '5':
             exit_trainer()
         elif k == 'wipe':
             print()
@@ -204,8 +217,6 @@ def exit_trainer():
     print("THANK YOU FOR TRAINING")
     print("###########################")
     print()
-    send_report()
-    print("Report Sent")
     time.sleep(delay)
     exit()
 
