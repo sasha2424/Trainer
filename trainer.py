@@ -10,13 +10,16 @@ Basic Math Trainer
 
 '''
 
+def get_date(s):
+    return s.join([str(now.month),str(now.day),str(now.year)])
+
 directory = os.path.abspath(os.path.dirname(__file__))
 save_dir = os.path.join(directory, "logs")
 if not os.path.exists(save_dir):
     os.makedirs(save_dir)
 
 now = datetime.datetime.now()
-save_name = "save_" + str(now.month) + "_" + str(now.day) + "_" + str(now.year) + ".txt"
+save_name = "save_" + get_date("_") + ".txt"
 
 save_file = os.path.join(save_dir, save_name)
 
@@ -93,12 +96,12 @@ class Sub3D:
     def points(self):
         return 1
 
-class Mult1_6:
+class MultSmall:
     def __init__(self):
         self.name = "Small Digit Multiplication"
     def next(self):
-        self.a = random.randint(2,6)
-        self.b = random.randint(2,6)
+        self.a = random.randint(2,5)
+        self.b = random.randint(2,5)
         self.c = self.a * self.b
     def wrong(self):
         return self.c - 1
@@ -116,8 +119,9 @@ class Mult1_6:
 delay = 1
 
 player = {}
-levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult1_6()]
+levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),MultSmall()]
 question_log = []
+daily_goal = [10,5,10,5,0]
 
 
 def send_report():
@@ -127,9 +131,7 @@ def send_report():
     msg = 'Subject: Adrian Math Report\r\n'
     msg = msg + '\r\n'
     msg = msg + 'Adrian Math Report '
-    msg = msg + str(now.month) + "\\"
-    msg = msg + str(now.day) + "\\"
-    msg = msg + str(now.year) + "\r\n"
+    msg = msg + get_date("\\") + "\r\n"
     msg = msg + str(player) + "\r\n"
     for line in question_log:
         msg = msg + line + "\r\n"
@@ -147,6 +149,12 @@ def give_points(points,level):
         player[level.name] = player[level.name] + points
     except:
         player[level.name] = points
+def points_on_level(level):
+    if not level.name in player.keys():
+        return 0
+    else:
+        return player[level.name]
+    
 
 def save_player():
     global player
@@ -169,40 +177,45 @@ def menu():
         extra = "No Saved Data"
     while True:
         clear()
-        print("###########################")
-        print("WELCOME TO THE MATH TRAINER    (" + extra + ")")
+        print("###########################\t" + get_date("/"))
+        print("WELCOME TO THE MATH TRAINER\t(" + extra + ")")
         print()
         print("1)\tSTART")
-        print("2)\tPROFILE")
-        print("3)\tSAVE")
-        print("4)\tSEND REPORT")
-        print("5)\tEXIT")
+        print("2)\tDAILY TRAINING")
+        print("3)\tPROFILE")
+        print("4)\tSAVE")
+        print("5)\tSEND REPORT")
+        print("6)\tEXIT")
         print()
         k = input(":: ")
         
         if k == '1':
             start()
         elif k == '2':
-            profile()
+            daily_training
         elif k == '3':
-            save_player()
+            profile()
         elif k == '4':
+            save_player()
+        elif k == '5':
             send_report()
             print("REPORT SENT")
             print("PRESS ENTER TO RETURN")
             input("")
-        elif k == '5':
+        elif k == '6':
             exit_trainer()
         elif k == 'wipe':
             print()
             print()
             print("WIPE ALL SAVED DATA AT:")
-            print(save_path)
+            print(save_file)
             print()
             print("[y/n]")
             if input(":: ") == 'y':
                 print("ALL DATA WIPED")
+                global player, question_log
                 player = {}
+                question_log = []
                 save_player()
             print()
             print("PRESS ENTER TO RETURN")
@@ -261,7 +274,7 @@ def start_level(level):
 
 def run_level(level):
     clear()
-    print("#"*(16 + len(level.name)))
+    print("#"*(16 + len(level.name)) + "\tPoints: " + str(points_on_level(level)))
     print("------| " + level.name + " |------")
     print("#"*(16 + len(level.name)))
     print("type \'q\',\'quit\', or \'exit\' to exit")
@@ -270,10 +283,10 @@ def run_level(level):
     level.next()
     print("##] " + level.question())
     u = level.wrong()
-    trys = 0
-    while trys < 3 and not level.isCorrect(u):
+    tries = 0
+    while tries < 3 and not level.isCorrect(u):
         k = input(":: ")
-        trys += 1
+        tries += 1
         if k == 'q' or k == 'quit' or k == 'exit':
             print("Returning to level select...")
             print()
@@ -285,11 +298,12 @@ def run_level(level):
             print("##] Seems like that is not a number.")
             print("##] Try again")
             print()
+            tries -= 1
     if level.isCorrect(u):
         print("##] Good Job!")
         give_points(level.points(),level)
         save_player()
-        question_log.append(level.question() + " | tries: " + str(trys))
+        question_log.append(level.question() + " | tries: " + str(tries))
         print("You Got " + str(level.points()) + " Point")
         print()
     else:
@@ -303,6 +317,52 @@ def run_level(level):
     time.sleep(delay)
     run_level(level)
 
+
+def daily_training():
+    global daily_goal
+    counts = [0 for l in levels]
+    while sum(counts) < sum(daily_goal):
+        options = [i for i in range(len(daily_goal)) if daily_goal[i] - counts[i] > 0]
+        selection = options[random.randint(0,len(options)-1)]
+        level = levels[selection]
+        clear()
+        print("##############################")
+        print("------| DAILY TRAINING |------\t Progress: ")
+        print("##############################\t" + str(sum(counts)) + "/" + str(sum(daily_goal)))
+        print()
+        print(level.name)
+        print()
+        print()
+        level.next()
+        print("##] " + level.question())
+        u = level.wrong()
+        tries = 0
+        while tries < 3 and not level.isCorrect(u):
+            k = input(":: ")
+            tries += 1
+            try:
+                u = int(k)
+            except:
+                print("##] Seems like that is not a number.")
+                print("##] Try again")
+                print()
+                tries -= 1
+        if level.isCorrect(u):
+            print("##] Good Job!")
+            counts[selection] = counts[selection] + 1
+            give_points(level.points(),level)
+            save_player()
+            question_log.append(level.question() + " | tries: " + str(tries))
+            print()
+        else:
+            give_points(-1,level)
+            save_player()
+            question_log.append(level.question() + " | Incorrect")
+            print()
+            print("Let's Try a different one :(")
+            print()
+        time.sleep(delay)
+    question_log.append("DAILY TRAINING COMPLETE")
 
 ############
 
