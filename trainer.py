@@ -185,19 +185,27 @@ def clear():
     os.system('cls')
 
 def menu():
-    extra = ""
+    global player
+    save_load = ""
     try:
         load_player()
-        extra = "Save Loaded"
+        save_load = "Save Loaded"
     except:
-        extra = "No Saved Data"
+        save_load = "No Saved Data"
+        
+    daily_training_complete = ""
+    try:
+        if player["daily training"]:
+            daily_training_complete = "(Daily Training Complete)"
+    except:
+        daily_training_complete = "(Not Complete)"
     while True:
         clear()
         print("###########################\t" + get_date("/"))
-        print("WELCOME TO THE MATH TRAINER\t(" + extra + ")")
+        print("WELCOME TO THE MATH TRAINER\t(" + save_load + ")")
         print()
         print("1)  START")
-        print("2)  DAILY TRAINING")
+        print("2)  DAILY TRAINING\t" + daily_training_complete)
         print("3)  PROFILE")
         print("4)  SAVE")
         print("5)  SEND REPORT")
@@ -229,7 +237,7 @@ def menu():
             print("[y/n]")
             if input(":: ") == 'y':
                 print("ALL DATA WIPED")
-                global player, question_log
+                global question_log
                 player = {}
                 question_log = []
                 save_player()
@@ -335,7 +343,7 @@ def run_level(level):
 
 
 def daily_training():
-    global daily_goal
+    global daily_goal, player
     counts = [0 for l in levels]
     while sum(counts) < sum(daily_goal):
         options = [i for i in range(len(daily_goal)) if daily_goal[i] - counts[i] > 0]
@@ -378,6 +386,7 @@ def daily_training():
             print("Let's Try a different one :(")
             print()
         time.sleep(delay)
+    player["daily training"] = True
     question_log.append("DAILY TRAINING COMPLETE")
 
 ############
