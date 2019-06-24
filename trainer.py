@@ -112,6 +112,22 @@ class MultSmall:
     def points(self):
         return 1
 
+class Mult:
+    def __init__(self):
+        self.name = "Multiplication"
+    def next(self):
+        self.a = random.randint(2,10)
+        self.b = random.randint(2,10)
+        self.c = self.a * self.b
+    def wrong(self):
+        return self.c - 1
+    def question(self):
+        return str(self.a) + " * " + str(self.b) + " = ?"
+    def isCorrect(self,u):
+        return self.c == u
+    def points(self):
+        return 1
+
 #########################################
 #########################################
 #########################################
@@ -119,7 +135,7 @@ class MultSmall:
 delay = 1
 
 player = {}
-levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),MultSmall()]
+levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),MultSmall(),Mult()]
 question_log = []
 daily_goal = [10,5,10,5,0]
 
@@ -180,12 +196,12 @@ def menu():
         print("###########################\t" + get_date("/"))
         print("WELCOME TO THE MATH TRAINER\t(" + extra + ")")
         print()
-        print("1)\tSTART")
-        print("2)\tDAILY TRAINING")
-        print("3)\tPROFILE")
-        print("4)\tSAVE")
-        print("5)\tSEND REPORT")
-        print("6)\tEXIT")
+        print("1)  START")
+        print("2)  DAILY TRAINING")
+        print("3)  PROFILE")
+        print("4)  SAVE")
+        print("5)  SEND REPORT")
+        print("6)  EXIT")
         print()
         k = input(":: ")
         
