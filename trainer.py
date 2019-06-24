@@ -192,7 +192,7 @@ def menu():
         if k == '1':
             start()
         elif k == '2':
-            daily_training
+            daily_training()
         elif k == '3':
             profile()
         elif k == '4':
