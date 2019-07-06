@@ -138,11 +138,11 @@ class Neg1D:
     def wrong(self):
         return self.c - 1
     def question(self):
-        if a < 0 and b < 0:
+        if self.a < 0 and self.b < 0:
             return "(" + str(self.a) + ") - (" + str(self.b) + ") = ?"
-        if a < 0:
+        if self.a < 0:
             return "(" + str(self.a) + ") - " + str(self.b) + " = ?"
-        if b < 0:
+        if self.b < 0:
             return str(self.a) + " - (" + str(self.b) + ") = ?"
         self.a = -1 * self.a
         return self.question()
