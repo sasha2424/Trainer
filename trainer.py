@@ -128,6 +128,45 @@ class Mult:
     def points(self):
         return 1
 
+class Neg1D:
+    def __init__(self):
+        self.name = "Negative Numbers"
+    def next(self):
+        self.a = random.randint(-10,10)
+        self.b = random.randint(-10,10)
+        self.c = self.a - self.b
+    def wrong(self):
+        return self.c - 1
+    def question(self):
+        if a < 0 and b < 0:
+            return "(" + str(self.a) + ") - (" + str(self.b) + ") = ?"
+        if a < 0:
+            return "(" + str(self.a) + ") - " + str(self.b) + " = ?"
+        if b < 0:
+            return str(self.a) + " - (" + str(self.b) + ") = ?"
+        self.a = -1 * self.a
+        return self.question()
+    def isCorrect(self,u):
+        return self.c == u
+    def points(self):
+        return 1
+
+class Comp:
+    def __init__(self):
+        self.name = "Comparing Numbers"
+    def next(self):
+        self.a = random.randint(-100,100)
+        self.b = random.randint(-100,100)
+        self.c = max(self.a,self.b)
+    def wrong(self):
+        return self.c - 1
+    def question(self):
+        return "Which is bigger? " + str(self.a) + " or " + str(self.b) + "?"
+    def isCorrect(self,u):
+        return self.c == u
+    def points(self):
+        return 1
+
 #########################################
 #########################################
 #########################################
@@ -135,9 +174,9 @@ class Mult:
 delay = 1
 
 player = {}
-levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),MultSmall(),Mult()]
+levels = [Add2D(),Add3D(),Sub2D(),Sub3D(),Mult(),Neg1D(),Comp()]
 question_log = []
-daily_goal = [10,5,10,5,0]
+daily_goal = [10,3,10,3,5,5,5]
 
 
 def send_report():
